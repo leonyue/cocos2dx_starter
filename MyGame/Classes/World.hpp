@@ -28,8 +28,8 @@ public:
     static cocos2d::Scene* createScene();
     void stopGame(cocos2d::Ref * pSender);
     void update(float delta);
+    void loadLevel(int level);
     virtual bool init();
-    
     CREATE_FUNC(World);
 };
 

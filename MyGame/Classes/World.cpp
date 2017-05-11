@@ -48,6 +48,8 @@ bool World::init()
         allf.pushBack(sf);
     }
     
+    m_level = 1;
+    loadLevel(1);
 
     // add player
     auto an = Animation::createWithSpriteFrames(allf);
@@ -85,8 +87,21 @@ bool World::init()
     return true;
 }
 
+void World::loadLevel(int level) {
+    auto oldmap=this->getChildByTag(10);
+    if(oldmap!=nullptr)
+    {
+        oldmap->removeFromParentAndCleanup(true);
+    }
+    //添加地图层
+    auto map=TMXTiledMap::create(StringUtils::format("map0%d.tmx",level));
+    map->setTag(10);
+    this->addChild(map,100);
+}
+
 void World::update(float delta) {
     auto sp = this->getChildByTag(110);
+    auto map = (TMXTiledMap *)this->getChildByTag(10);
     float positionY;
     if (jump) {
         positionY = sp->getPositionY() + speed;
@@ -98,6 +113,7 @@ void World::update(float delta) {
         }
         sp->setPositionY(positionY);
     }
+    map->setPositionX(map->getPositionX() - 1);
 }
 
 void World::stopGame(cocos2d::Ref *pSender) {
