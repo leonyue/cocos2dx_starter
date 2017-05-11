@@ -42,6 +42,22 @@ bool World::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu,1);
     
+    Vector<SpriteFrame *>allf;
+    for (int i = 1; i < 7; i++) {
+        auto sf = SpriteFrame::create(StringUtils::format("run%d.png",i), Rect(0, 0, 100, 100));
+        allf.pushBack(sf);
+    }
+    
+    auto an = Animation::createWithSpriteFrames(allf);
+    an->setDelayPerUnit(0.03);
+    auto ani = Animate::create(an);
+    auto Sp = Sprite::create();
+    Sp -> setTag(110);
+    Sp -> runAction(RepeatForever::create(ani));
+    this->addChild(Sp,101);
+    Sp->setPosition(300,50);
+    this->scheduleUpdate();
+    
     
     return true;
 }
