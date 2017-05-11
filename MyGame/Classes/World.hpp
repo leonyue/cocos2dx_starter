@@ -27,7 +27,7 @@ public:
     
     static cocos2d::Scene* createScene();
     void stopGame(cocos2d::Ref * pSender);
-    
+    void update(float delta);
     virtual bool init();
     
     CREATE_FUNC(World);

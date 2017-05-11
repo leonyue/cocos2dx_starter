@@ -48,6 +48,8 @@ bool World::init()
         allf.pushBack(sf);
     }
     
+
+    // add player
     auto an = Animation::createWithSpriteFrames(allf);
     an->setDelayPerUnit(0.03);
     auto ani = Animate::create(an);
@@ -55,13 +57,48 @@ bool World::init()
     Sp -> setTag(110);
     Sp -> runAction(RepeatForever::create(ani));
     this->addChild(Sp,101);
-    Sp->setPosition(300,50);
+    Sp->setPosition(200,50);
     this->scheduleUpdate();
     
+    //add score
+    auto lableScore = Label::createWithBMFont("futura-48.fnt", "365");
+    this->addChild(lableScore);
+    lableScore->setTag(111);
+    lableScore->setPosition(Director::getInstance()->getWinSize().width-200,Director::getInstance()->getWinSize().height/2);
+    
+    this->jump = false;
+    this->score = 0;
+    
+    //add touch
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan=[&](Touch* t, Event* e) {
+        if (!this->jump) {
+            jump = true;
+            speed = 30;
+            spDir = 1;
+        }
+        return true;
+    };
+    
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
     
     return true;
 }
 
+void World::update(float delta) {
+    auto sp = this->getChildByTag(110);
+    float positionY;
+    if (jump) {
+        positionY = sp->getPositionY() + speed;
+        speed -= 2;
+        if (positionY <= 50) {
+            positionY = 50;
+            jump = false;
+            speed = 0;
+        }
+        sp->setPositionY(positionY);
+    }
+}
 
 void World::stopGame(cocos2d::Ref *pSender) {
     Director::getInstance()->popScene();
